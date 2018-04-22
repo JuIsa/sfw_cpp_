@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <set>
 
 using namespace std;
 
@@ -10,7 +11,7 @@ class Board{
 	
 	public:
 	Board()
-	:sz(2)
+	:sz(2),v()
 	{
 		for(int i=0; i<sz; i++){
 			vector<int> vin;
@@ -21,7 +22,7 @@ class Board{
 		}
 	}
 	Board(const int& x)
-	:sz(x)
+	:sz(x),v()
 	{
 		vector<vector<int>> vnew;
 		for(int i=0; i<x;i++){
@@ -42,22 +43,35 @@ class Board{
 		return v[i][j];
 	}
 	
-	const void put_1(Board& b, int ox, int oy);
-	const void erase_1(Board& b, int ox, int oy);
+	bool operator < (const Board& a) const{
+		for(int i=0;i <v.size();i++){
+			for(int j=0; j<v[i].size(); j++){
+				int t = v[i][j];
+				int loc = this->v[i][j]; 
+					if(loc!=t)
+						return false;
+					
+			}
+		}
+		return true;
+	}
 	
-	void change_to_1(int& x, int& y){
+	 void put_1(Board& b, const int ox,const int oy);
+	 void erase_1(Board& b, const int ox, const int oy);
+	
+	 void change_to_1(const int& x,const int& y){
 		v[x-1][y-1]=1;
 	}
-	void change_to_0(int& x, int& y){
+	 void change_to_0(const int& x,const int& y){
 		v[x-1][y-1]=0;
 	}
 	
 };
 
-const void put_1(Board& b, int ox, int oy){
+ void put_1(Board& b, const int ox, const int oy){
 	b.change_to_1(ox, oy);
 }
-const void erase_1(Board& b, int ox, int oy){
+ void erase_1(Board& b, const int ox, const int oy){
 	b.change_to_0(ox, oy);
 }
 
@@ -74,6 +88,7 @@ int main()
 {
 	int x;
 	cin>>x;
+	set<Board> sb;
 	Board b(x);
 	for(int i=0;i<x*2;i++){
 		int oy,ox;
@@ -84,8 +99,15 @@ int main()
 		}else if(ch=='-'){
 			erase_1(b,ox,oy);
 		}
+		sb.insert(b);
 	}
-	print(b);
+	
+	//Board a(x);
+	//cout<< a<b<<endl	
+	for(auto  it = sb.begin(); it!=sb.end(); ++it){
+		print(*it);
+		cout<<endl;
+	}
 	//b.init(b);
 	return 0;
 }
