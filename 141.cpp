@@ -39,28 +39,43 @@ class Board{
 	int size()const{
 		return sz;
 	}
-	
-	//Board rotated90(Board b);
-	
 	void print(const Board& b);
+	
 	int positionOf(int& i, int& j) const{
 		return v[i][j];
 	}
 	
 	bool operator < (const Board& a) const{
-		for(int i=0;i <v.size();i++){
-			for(int j=0; j<v[i].size(); j++){
+		//for(auto it
+		for(int i=0;i <sz;i++){
+			for(int j=0; j<sz; j++){
 				int t = a.v[i][j];
 				int loc = v[i][j]; 
-				//cout<< t<<" "<<loc<<endl;
-					if(loc!=t)
+					if(loc>t or loc<t){
 						return true;
-					
+					}
 			}
 		}
 		return false;
 	}
 	
+	Board& operator= (const Board& b){
+		for(int i=0;i<b.v.size();i++){
+			for(int j=0; j<b.v[0].size(); j++){
+				v[i][j]=b.v[i][j];
+			}
+		}
+	}
+	Board rotateB(Board& b){
+		Board temp = b;
+		for(int i=0; i<sz; i++){
+			for(int j=0; j<sz;j++){
+				temp.v[i][j] = b.v[sz-j-1][i];
+			}
+		}
+		
+		return temp;
+	}
 	 void put_1(Board& b, const int ox,const int oy);
 	 void erase_1(Board& b, const int ox, const int oy);
 	
@@ -79,12 +94,6 @@ class Board{
  void erase_1(Board& b, const int ox, const int oy){
 	b.change_to_0(ox, oy);
 }
-Board rotated90(Board& b){
-		Board t=b;
-		
-		return t;
-		
-}
 void print(const Board& b){
 	for(int i=0; i<b.size();i++){
 		for(int u=0; u<b.size();u++){
@@ -93,6 +102,18 @@ void print(const Board& b){
 		cout<<endl;
 	}
 }
+void rotated90(set<Board>& sb, Board b, int& count){
+	if(count<3){
+		Board t = b.rotateB(b);
+		//print(t);
+		//cout<<endl;
+		count++;
+		sb.insert(t);
+		rotated90(sb,t, count);
+	}
+		count=0;	
+}
+
 
 int main()
 {
@@ -100,6 +121,7 @@ int main()
 	cin>>x;
 	set<Board> sb;
 	Board b(x);
+	int count=0;
 	for(int i=0;i<x*2;i++){
 		int oy,ox;
 		char ch;
@@ -110,18 +132,11 @@ int main()
 			erase_1(b,ox,oy);
 		}
 		sb.insert(b);
-		Board rot90 = rotated90(b);
-		//Board rot180 = rotated180(b);
-		//Board rot270 = rotated270(b);
-		
-	}
-	
-	//Board a(x);
-	//cout<< a<b<<endl	
+		rotated90(sb,b,count);
+	}	
 	for(auto  it = sb.begin(); it!=sb.end(); ++it){
 		print(*it);
 		cout<<endl;
 	}
-	//b.init(b);
 	return 0;
 }
