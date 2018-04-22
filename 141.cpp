@@ -9,6 +9,7 @@ class Board{
 	int sz;
 	vector<vector<int>> v;
 	
+	
 	public:
 	Board()
 	:sz(2),v()
@@ -38,6 +39,9 @@ class Board{
 	int size()const{
 		return sz;
 	}
+	
+	//Board rotated90(Board b);
+	
 	void print(const Board& b);
 	int positionOf(int& i, int& j) const{
 		return v[i][j];
@@ -46,14 +50,15 @@ class Board{
 	bool operator < (const Board& a) const{
 		for(int i=0;i <v.size();i++){
 			for(int j=0; j<v[i].size(); j++){
-				int t = v[i][j];
-				int loc = this->v[i][j]; 
+				int t = a.v[i][j];
+				int loc = v[i][j]; 
+				//cout<< t<<" "<<loc<<endl;
 					if(loc!=t)
-						return false;
+						return true;
 					
 			}
 		}
-		return true;
+		return false;
 	}
 	
 	 void put_1(Board& b, const int ox,const int oy);
@@ -74,7 +79,12 @@ class Board{
  void erase_1(Board& b, const int ox, const int oy){
 	b.change_to_0(ox, oy);
 }
-
+Board rotated90(Board& b){
+		Board t=b;
+		
+		return t;
+		
+}
 void print(const Board& b){
 	for(int i=0; i<b.size();i++){
 		for(int u=0; u<b.size();u++){
@@ -100,6 +110,10 @@ int main()
 			erase_1(b,ox,oy);
 		}
 		sb.insert(b);
+		Board rot90 = rotated90(b);
+		//Board rot180 = rotated180(b);
+		//Board rot270 = rotated270(b);
+		
 	}
 	
 	//Board a(x);
